@@ -5,4 +5,6 @@
     <string name="answer_msg1">Push Camera Key To Answer</string>
     <string name="answer_msg2"> ... Or  ...</string>
 	<string name="answer_msg3">Return To Regular Call Screen</string>
+	<string name="answer_msg4">Long Press To Answer</string>
+	<string name="answer_msg5">Reject Call</string>
 </resources>

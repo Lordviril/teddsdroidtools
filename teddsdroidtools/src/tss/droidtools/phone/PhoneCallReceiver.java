@@ -1,6 +1,6 @@
 package tss.droidtools.phone;
 
-import android.content.BroadcastReceiver;
+import tss.droidtools.BaseReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -23,18 +23,21 @@ import android.util.Log;
 * @author tedd
 *
 */
-public class PhoneCallReceiver extends BroadcastReceiver {
+public class PhoneCallReceiver extends BaseReceiver {
 	
 	private Handler sh;
 	private Context c;
 	private CreateCallAnswerActivityTask t = new CreateCallAnswerActivityTask();
+
 	
 	/**
 	 * Call back which fires off when the phone changes state.  
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-
+		c = context;  // TODO: possible clean up on this var
+		debugOn = Hc.debugEnabled(c);
+		
 		/* make sure the feature is enabled */
 		boolean enabled = context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ENABLED_KEY, false);
 		if (!enabled) {
@@ -50,6 +53,16 @@ public class PhoneCallReceiver extends BroadcastReceiver {
 			c = context;	// stash the passed in context away in an instance variable so the runnable can access it
 			sh = new Handler();
 			sh.postDelayed(t, Hc.STARTUP_DELAY);
+
+			//TODO: start a short lived service that will start up the thread instead of just spawing a delayed thread.
+			// From the Android docs that describe broadcast receivers:
+			
+			// If onReceive() spawns the thread and then returns, the entire process, 
+			// including the new thread, is judged to be inactive (unless other application 
+			// components are active in the process), putting it in jeopardy of being killed. 
+			// The solution to this problem is for onReceive() to start a service and let the 
+			// service do the job, so the system knows that there is still active work being 
+			// done in the process. 
 		}
 	}
 
@@ -90,9 +103,5 @@ public class PhoneCallReceiver extends BroadcastReceiver {
         	sh.removeCallbacks(t);
         	sh = null;
 		}
-	}
-	
-	private void logMe(String s) {
-		if (Hc.DBG) Log.d(Hc.LOG_TAG, Hc.PRE_TAG + "PhoneCallReceiver" + Hc.POST_TAG + " "+ s);
 	}
 }

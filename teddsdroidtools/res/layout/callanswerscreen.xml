@@ -31,6 +31,13 @@
 			android:layout_below="@id/msg1"
 			android:layout_centerHorizontal="true"
 			android:layout_marginBottom="90px" />    		
+    	<Button 
+			android:id="@+id/rejectCallButton"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:text="@string/answer_msg5"
+			android:layout_below="@id/msg1"
+			android:layout_centerHorizontal="true"/>
 
     	<Button 
 			android:id="@+id/returnToCallScreen"

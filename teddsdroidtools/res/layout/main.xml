@@ -76,9 +76,26 @@
 		        android:layout_height="wrap_content"/>
 	    </TableRow>
  -->
+ 
+ 	    <View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+	        	
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:text="Debug Logging"
+	            android:padding="3dip" />
+	            
+	        <CheckBox android:id="@+id/debugLoggingCheckBox"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+	    </TableRow>
+	    
 	    <View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
+
 
 	</TableLayout>
 		   	
