@@ -34,6 +34,10 @@
 		
 	</application>
 	
+	<!--  
+		use of the TelephonyManager extra state constants in the broadcast intent passed 
+		to the receiver require min sdk leve 3.
+	-->
 	<uses-sdk android:minSdkVersion="3" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.RESTART_PACKAGES" />

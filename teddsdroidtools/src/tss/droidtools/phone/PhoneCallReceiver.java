@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 /**
 *
@@ -39,15 +38,17 @@ public class PhoneCallReceiver extends BaseReceiver {
 		debugOn = Hc.debugEnabled(c);
 		
 		/* make sure the feature is enabled */
-		boolean enabled = context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ENABLED_KEY, false);
-		if (!enabled) {
+		boolean enabled = context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_PHONE_TOOLS_KEY, false);
+		if (!enabled) 
+		{
 			logMe("feature disabled. ");
 			return;
 		} 
 
 		/* examine the state of the phone that caused this receiver to fire off */
 		String phone_state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-		if (phone_state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+		if (phone_state.equals(TelephonyManager.EXTRA_STATE_RINGING)) 
+		{
 			
 			logMe("the phone is ringing, scheduling creation call answer screen activity");
 			c = context;	// stash the passed in context away in an instance variable so the runnable can access it
@@ -103,5 +104,9 @@ public class PhoneCallReceiver extends BaseReceiver {
         	sh.removeCallbacks(t);
         	sh = null;
 		}
+	}
+	
+	private void logMe(String s) {
+		super.logMe("PhoneCallReceiver", s);
 	}
 }

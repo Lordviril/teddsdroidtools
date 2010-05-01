@@ -1,7 +1,6 @@
 package tss.droidtools.phone;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
+import tss.droidtools.BaseActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,10 +11,8 @@ import android.widget.Toast;
  * @author tedd
  *
  */
-public class ConfigScreenActivity extends Activity {
+public class ConfigScreenActivity extends BaseActivity {
 
-	private SharedPreferences p;
-	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,24 +20,26 @@ public class ConfigScreenActivity extends Activity {
 
         setContentView(R.layout.main);
                
-        p = this.getSharedPreferences(Hc.PREFSNAME, 0);
-        
-        // defaults
-        if (!p.contains(Hc.PREF_ENABLED_KEY))
-        	p.edit().putBoolean(Hc.PREF_ENABLED_KEY, false).commit();
+        // set the defaults
+        if (!p.contains(Hc.PREF_PHONE_TOOLS_KEY))
+        	p.edit().putBoolean(Hc.PREF_PHONE_TOOLS_KEY, false).commit();
         if (!p.contains(Hc.PREF_DEBUG_LOGGING_KEY))
         	p.edit().putBoolean(Hc.PREF_DEBUG_LOGGING_KEY, true).commit();
 
-        Boolean enabled = p.getBoolean(Hc.PREF_ENABLED_KEY, false);
+        Boolean enabled = p.getBoolean(Hc.PREF_PHONE_TOOLS_KEY, false);
+
         final CheckBox checkbox = (CheckBox) findViewById(R.id.cameraAnswerCheckBox);
         checkbox.setChecked(enabled);
         checkbox.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                	p.edit().putBoolean(Hc.PREF_ENABLED_KEY, true).commit();
+                if (((CheckBox) v).isChecked()) 
+                {
+                	p.edit().putBoolean(Hc.PREF_PHONE_TOOLS_KEY, true).commit();
                     Toast.makeText(ConfigScreenActivity.this, "Feature Enabled", Toast.LENGTH_SHORT).show();
-                } else {
-                	p.edit().putBoolean(Hc.PREF_ENABLED_KEY, false).commit();
+                } 
+                else 
+                {
+                	p.edit().putBoolean(Hc.PREF_PHONE_TOOLS_KEY, false).commit();
                     Toast.makeText(ConfigScreenActivity.this, "Feature Disabled", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -51,10 +50,13 @@ public class ConfigScreenActivity extends Activity {
         debugLoggingcheckbox.setChecked(debugLoggingEnabled);
         debugLoggingcheckbox.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
+                if (((CheckBox) v).isChecked()) 
+                {
                 	p.edit().putBoolean(Hc.PREF_DEBUG_LOGGING_KEY, true).commit();
                     Toast.makeText(ConfigScreenActivity.this, "Debug Logging Enabled", Toast.LENGTH_SHORT).show();
-                } else {
+                } 
+                else 
+                {
                 	p.edit().putBoolean(Hc.PREF_DEBUG_LOGGING_KEY, false).commit();
                     Toast.makeText(ConfigScreenActivity.this, "Debug Logging Disabled", Toast.LENGTH_SHORT).show();
                 }
@@ -63,7 +65,4 @@ public class ConfigScreenActivity extends Activity {
         
         
     }
-//	private void logMe(String s) {
-//		if (Hc.DBG) Log.d(Hc.LOG_TAG, Hc.PRE_TAG + "ConfigScreenActivity" + Hc.POST_TAG + " "+ s);
-//	}
 }

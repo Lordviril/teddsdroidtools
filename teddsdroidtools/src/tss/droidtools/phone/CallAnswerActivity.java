@@ -2,7 +2,7 @@ package tss.droidtools.phone;
 
 import java.util.List;
 
-import android.app.Activity;
+import tss.droidtools.BaseActivity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.BroadcastReceiver;
@@ -10,8 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Process;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,9 +31,8 @@ import android.widget.Button;
  * @author tedd
  *
  */
-public class CallAnswerActivity extends Activity {
-	protected CallAnswerActivityReceiver r;
-	private Boolean debugOn;
+public class CallAnswerActivity extends BaseActivity {
+	protected BroadcastReceiver r;
 	private ActivityManager am;
 	
 	@Override
@@ -44,8 +43,8 @@ public class CallAnswerActivity extends Activity {
 		registerReciever();
 		setContentView(R.layout.callanswerscreen);
 		Button returnToCallScreen = (Button) findViewById(R.id.returnToCallScreen);
-		returnToCallScreen.setOnClickListener(new OnClickListener() {
-          	public void onClick(View v){
+		returnToCallScreen.setOnClickListener(new OnClickListener()	{
+          	public void onClick(View v) {
           		logMe("returnToCallScreen onClick event");
           		finishHim();
           	}
@@ -58,21 +57,49 @@ public class CallAnswerActivity extends Activity {
           	public void onClick(View v){
           		logMe("rejectCall onClick event");
           		List<RunningAppProcessInfo> ps = am.getRunningAppProcesses();
-          		for (RunningAppProcessInfo p : ps) {
+          		for (RunningAppProcessInfo p : ps) 
+          		{
           			
           			logMe(" processName "+p.processName);
           			logMe(" pid "+p.pid);
           			String[] l = p.pkgList;
-          			for (int x = 0; x < l.length; x++)
+          			for (int x = 0; x < l.length; x++) 
+          			{
           				logMe("   pkgList["+x+"]: "+l[x]);
+          			}
           			//logMe(" pkgList "+p.pkgList);
           			logMe(" object: " +p);
+          			
+          			if (p.pkgList[0].equals("com.android.providers.telephony")) 
+          			{
+          				try {
+	          				logMe("sending sig usr1 to phone process...");
+	          				Process.sendSignal(p.pid, Process.SIGNAL_USR1);
+	          				Thread.sleep(500L);
+	          				
+	          				logMe("sending sig quit to phone process...");
+	          				Process.sendSignal(p.pid, Process.SIGNAL_QUIT);
+	          				Thread.sleep(500L);
+
+	          				logMe("sending sig kill to phone process...");
+	          				Process.sendSignal(p.pid, Process.SIGNAL_KILL);
+	          				Thread.sleep(500L);
+
+						} 
+          				catch (InterruptedException e) 
+          				{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+          			}
           		}
           		
+          		
+          		
           		// i've got a shotgun...
-          		am.restartPackage("com.android.providers.telephony");
+          		//am.restartPackage("com.android.providers.telephony");
           		// and you aint got one...
-          		am.restartPackage("com.android.phone");
+          		//am.restartPackage("com.android.phone");
           		finishHim();
           	}
 		});
@@ -99,23 +126,31 @@ public class CallAnswerActivity extends Activity {
 		registerReciever();
 		super.onResume();
 		
+		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+		if (tm.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
+			logMe("Hey! the phone is idle");
+		}
 		//TODO: add a check to make sure the phone is still ringing in the case
-		//      that the caller hung up before the activity started.
+		//      that the caller hung up before the activity had a chance to get started.
+		//      In that case, just bail out.
 	}
 	
 	@Override
 	protected void onPause() {
-		logMe("onPause");
+		logMe("paused");
 		unHookReceiver();
 		super.onPause();
 	}
 
-	@Override
 	protected void onStop() {
-		logMe("onStop");
+		logMe("stopped");
 		super.onStop();
 	}
 	
+	protected void onDestroy() {
+		logMe("destroyed");
+		super.onStop();
+	}
 
 	/** track ball version for our friends with Nexus Ones */
 	@Override
@@ -170,26 +205,42 @@ public class CallAnswerActivity extends Activity {
 	}
 	
 	public void registerReciever() {
-		if (r != null) {
-			logMe("receiver is already registered, skipping.");
-			return;
-		}
+		if (r != null) return;
+
 		logMe("registering PHONE_STATE receiver");
-		r = new CallAnswerActivityReceiver();
-		// kill this activity once the phone is picked up.
+
+
+		r = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context c, Intent i) {
+				String phone_state = i.getStringExtra(TelephonyManager.EXTRA_STATE);
+				if (!phone_state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+					logMe("received "+phone_state+", time to go bye bye, thanks for playing!");
+					finishHim();
+				}
+			} 
+		};
+		
+		// register this receiver to kill this activity once the phone is picked up.
 		this.registerReceiver(r, new IntentFilter("android.intent.action.PHONE_STATE"));
 		
 		
 	}
+
+	/** 
+	 * unregister the broadcast receiver in charge of exiting out of the app when the phone
+	 * goes into OFFHOOK or IDLE. 
+	 */
 	public void unHookReceiver() {
-		logMe("unhooking the reciever");
-		if (r != null) {
-			unregisterReceiver(r);
-		} else {
-			logMe("whoops! reciever was allready null...");
+
+		if (r != null) 
+		{
+			logMe("unhooking the reciever");
+			this.unregisterReceiver(r);
+			r = null;
+			logMe("done");
 		}
-		r = null;
-		logMe("done");
+
 	}
 	
 	private void answerCall() {
@@ -219,25 +270,7 @@ public class CallAnswerActivity extends Activity {
 		finish();		
 	}
 	
-
-	
-	/** shut off if call was not answered */
-	private class CallAnswerActivityReceiver extends BroadcastReceiver {
-		public CallAnswerActivityReceiver() {
-			logMe("created a CallAnswerActivityReceiver for this task");
-		}
-		@Override
-		public void onReceive(Context c, Intent i) {
-			String phone_state = i.getStringExtra(TelephonyManager.EXTRA_STATE);
-			if (!phone_state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-				logMe("received "+phone_state+", time to go bye bye, thanks for playing!");
-				finishHim();
-			}
-		} 
-	}
-	
-	
 	private void logMe(String s) {
-		if (debugOn) Log.d(Hc.LOG_TAG, Hc.PRE_TAG + "CallAnswerActivity" + Hc.POST_TAG + " "+ s);
+		super.logMe("CallAnswerActivity", s);
 	}
 }

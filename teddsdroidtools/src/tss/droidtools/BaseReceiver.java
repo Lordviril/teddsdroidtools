@@ -14,7 +14,7 @@ public class BaseReceiver extends BroadcastReceiver {
 		throw new UnsupportedOperationException();
 	}
 
-	protected void logMe(String s) {
-		if (debugOn) Log.d(Hc.LOG_TAG, Hc.PRE_TAG + "PhoneCallReceiver" + Hc.POST_TAG + " "+ s);
+	protected void logMe(String extra, String s) {
+		if (debugOn) Log.d(Hc.LOG_TAG, Hc.PRE_TAG + extra + Hc.POST_TAG + " "+ s);
 	}	
 }
