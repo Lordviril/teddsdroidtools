@@ -1,21 +1,18 @@
 package tss.droidtools.phone;
 
-import java.util.List;
-
 import tss.droidtools.BaseActivity;
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Process;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
 /**
  *
@@ -38,10 +35,13 @@ public class CallAnswerActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		debugOn = Hc.debugEnabled(getApplicationContext());
 		logMe("onCreate called");
+
+		// turn receivers on prior to drawing screen.
 		registerReciever();
 		setContentView(R.layout.callanswerscreen);
+
+		// return button
 		Button returnToCallScreen = (Button) findViewById(R.id.returnToCallScreen);
 		returnToCallScreen.setOnClickListener(new OnClickListener()	{
           	public void onClick(View v) {
@@ -51,56 +51,19 @@ public class CallAnswerActivity extends BaseActivity {
 		});
 		
 
+		// reject button
 		am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 		Button rejectCall = (Button) findViewById(R.id.rejectCallButton);
-		rejectCall.setOnClickListener(new OnClickListener() {
-          	public void onClick(View v){
+		rejectCall.setOnLongClickListener(new OnLongClickListener() {
+          	public boolean onLongClick(View v){
           		logMe("rejectCall onClick event");
-          		List<RunningAppProcessInfo> ps = am.getRunningAppProcesses();
-          		for (RunningAppProcessInfo p : ps) 
-          		{
-          			
-          			logMe(" processName "+p.processName);
-          			logMe(" pid "+p.pid);
-          			String[] l = p.pkgList;
-          			for (int x = 0; x < l.length; x++) 
-          			{
-          				logMe("   pkgList["+x+"]: "+l[x]);
-          			}
-          			//logMe(" pkgList "+p.pkgList);
-          			logMe(" object: " +p);
-          			
-          			if (p.pkgList[0].equals("com.android.providers.telephony")) 
-          			{
-          				try {
-	          				logMe("sending sig usr1 to phone process...");
-	          				Process.sendSignal(p.pid, Process.SIGNAL_USR1);
-	          				Thread.sleep(500L);
-	          				
-	          				logMe("sending sig quit to phone process...");
-	          				Process.sendSignal(p.pid, Process.SIGNAL_QUIT);
-	          				Thread.sleep(500L);
-
-	          				logMe("sending sig kill to phone process...");
-	          				Process.sendSignal(p.pid, Process.SIGNAL_KILL);
-	          				Thread.sleep(500L);
-
-						} 
-          				catch (InterruptedException e) 
-          				{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-          			}
-          		}
-          		
-          		
           		
           		// i've got a shotgun...
-          		//am.restartPackage("com.android.providers.telephony");
+          		am.restartPackage("com.android.providers.telephony");
           		// and you aint got one...
-          		//am.restartPackage("com.android.phone");
+          		am.restartPackage("com.android.phone");
           		finishHim();
+          		return true;
           	}
 		});
 	}
@@ -128,22 +91,27 @@ public class CallAnswerActivity extends BaseActivity {
 		
 		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		if (tm.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
-			logMe("Hey! the phone is idle");
+			logMe("Hey! the phone is idle. stopping");
+			finishHim();
 		}
-		//TODO: add a check to make sure the phone is still ringing in the case
-		//      that the caller hung up before the activity had a chance to get started.
-		//      In that case, just bail out.
 	}
 	
 	@Override
 	protected void onPause() {
+		super.onPause();
 		logMe("paused");
 		unHookReceiver();
-		super.onPause();
+		if(!isFinishing()) {
+			logMe("giggle...");
+            Intent i = new Intent(getApplicationContext(),CallAnswerActivity.class);
+	        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+	        getApplicationContext().startActivity(i);
+		}
+
 	}
 
 	protected void onStop() {
-		logMe("stopped");
+		logMe("stopped, finishing? "+isFinishing());
 		super.onStop();
 	}
 	
@@ -171,19 +139,16 @@ public class CallAnswerActivity extends BaseActivity {
 	/** broadcast HEADSETHOOK when the camera button is pressed*/
 	@Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-		//logMe("dispatchKeyEvent called with "+event);
 		
 		switch (event.getKeyCode()) {
 		case KeyEvent.KEYCODE_FOCUS:
-			/* this event occurs when you press down lightly on the camera button
+			/*
+			 * this event occurs when you press down lightly on the camera button
 			 * e.g. auto focus.  The event happens a lot even when you press down
-			 * 
 			 * hard (as the button is on its way down to the "hard press").
-			 */
-			
-			//logMe("KEYCODE_FOCUS ignoring it");
-			
-			/* returning true to consume the event and prevent further processing of it by other apps */ 
+			 * returning true to consume the event and prevent further processing of 
+			 * it by other apps 
+			 */ 
 			return true;
 			
 		case KeyEvent.KEYCODE_CAMERA:
@@ -208,23 +173,20 @@ public class CallAnswerActivity extends BaseActivity {
 		if (r != null) return;
 
 		logMe("registering PHONE_STATE receiver");
-
-
 		r = new BroadcastReceiver() {
 			@Override
-			public void onReceive(Context c, Intent i) {
+			public void onReceive(Context c, Intent i) 	{
+				
 				String phone_state = i.getStringExtra(TelephonyManager.EXTRA_STATE);
-				if (!phone_state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+				if (!phone_state.equals(TelephonyManager.EXTRA_STATE_RINGING)) 
+				{
 					logMe("received "+phone_state+", time to go bye bye, thanks for playing!");
 					finishHim();
 				}
 			} 
 		};
 		
-		// register this receiver to kill this activity once the phone is picked up.
 		this.registerReceiver(r, new IntentFilter("android.intent.action.PHONE_STATE"));
-		
-		
 	}
 
 	/** 
@@ -240,7 +202,6 @@ public class CallAnswerActivity extends BaseActivity {
 			r = null;
 			logMe("done");
 		}
-
 	}
 	
 	private void answerCall() {
@@ -263,7 +224,7 @@ public class CallAnswerActivity extends BaseActivity {
 		logMe("broadcasting ACTION_MEDIA_BUTTION intent with a KEYCODE_HEADSETHOOK code on an ACTION_DOWN action");
 
 
-		//unHookReceiver();
+		//unHookReceiver();  // onPause does this now.
 		
 		sendOrderedBroadcast(fakeHeadsetIntent, null);
 		moveTaskToBack(true);		
