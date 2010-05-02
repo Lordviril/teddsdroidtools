@@ -19,50 +19,60 @@ public class ConfigScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
-               
-        // set the defaults
-        if (!p.contains(Hc.PREF_PHONE_TOOLS_KEY))
-        	p.edit().putBoolean(Hc.PREF_PHONE_TOOLS_KEY, false).commit();
-        if (!p.contains(Hc.PREF_DEBUG_LOGGING_KEY))
-        	p.edit().putBoolean(Hc.PREF_DEBUG_LOGGING_KEY, true).commit();
 
-        Boolean enabled = p.getBoolean(Hc.PREF_PHONE_TOOLS_KEY, false);
+        renderConfigCheckbox(Hc.PREF_PHONE_TOOLS_KEY,false,R.id.phoneToolsCheckBox,"Phone Tools");
+        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_CAMERA_KEY,false,R.id.cameraAnswerCheckBox,"Camera Button Answer");
+        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_TRACKBALL_KEY,false,R.id.trackballAnswerCheckBox,"Trackball Answer");
+        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_BUTTON_KEY,false,R.id.touchscreenButtonAnswerCheckBox,"Touchscreen Button Answer");
+        renderConfigCheckbox(Hc.PREF_ALLOW_REJECT_KEY,false,R.id.rejectCallsCheckBox,"Reject Call Feature");
+        renderConfigCheckbox(Hc.PREF_DEBUG_LOGGING_KEY,true,R.id.debugLoggingCheckBox,"Debug Logging");
+        
+    }
+    
+    private void renderConfigCheckbox(String key,boolean defaultVal,int viewId, String toastMsg) {
+    	// set the default if it didn't exist
+        if (!p.contains(key))
+        	p.edit().putBoolean(key, defaultVal).commit();
 
-        final CheckBox checkbox = (CheckBox) findViewById(R.id.cameraAnswerCheckBox);
-        checkbox.setChecked(enabled);
-        checkbox.setOnClickListener(new OnClickListener() {
+        // get the current setting
+        Boolean currentSetting = p.getBoolean(key, defaultVal);
+        
+        // get the view component
+        final CheckBox checkbox = (CheckBox) findViewById(viewId);
+        
+        // set the current setting
+        checkbox.setChecked(currentSetting);
+        
+        // register the onClick call back
+        checkbox.setOnClickListener(new CustomOnClickListener(key,toastMsg) {
             public void onClick(View v) {
                 if (((CheckBox) v).isChecked()) 
                 {
-                	p.edit().putBoolean(Hc.PREF_PHONE_TOOLS_KEY, true).commit();
-                    Toast.makeText(ConfigScreenActivity.this, "Feature Enabled", Toast.LENGTH_SHORT).show();
+                	p.edit().putBoolean(key, true).commit();
+                    Toast.makeText(ConfigScreenActivity.this, toastMsg + " Enabled", Toast.LENGTH_SHORT).show();
                 } 
                 else 
                 {
-                	p.edit().putBoolean(Hc.PREF_PHONE_TOOLS_KEY, false).commit();
-                    Toast.makeText(ConfigScreenActivity.this, "Feature Disabled", Toast.LENGTH_SHORT).show();
+                	p.edit().putBoolean(key, false).commit();
+                    Toast.makeText(ConfigScreenActivity.this, toastMsg + " Disabled", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-        
-        Boolean debugLoggingEnabled = p.getBoolean(Hc.PREF_DEBUG_LOGGING_KEY, true);
-        final CheckBox debugLoggingcheckbox = (CheckBox) findViewById(R.id.debugLoggingCheckBox);
-        debugLoggingcheckbox.setChecked(debugLoggingEnabled);
-        debugLoggingcheckbox.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) 
-                {
-                	p.edit().putBoolean(Hc.PREF_DEBUG_LOGGING_KEY, true).commit();
-                    Toast.makeText(ConfigScreenActivity.this, "Debug Logging Enabled", Toast.LENGTH_SHORT).show();
-                } 
-                else 
-                {
-                	p.edit().putBoolean(Hc.PREF_DEBUG_LOGGING_KEY, false).commit();
-                    Toast.makeText(ConfigScreenActivity.this, "Debug Logging Disabled", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });     
-        
-        
+        });  
+    }
+    
+    private class CustomOnClickListener implements OnClickListener {
+
+    	protected String key;
+    	protected String toastMsg;
+    	public CustomOnClickListener(String key,String toastMsg) {
+    		this.key = key; 
+    		this.toastMsg = toastMsg;
+    	}
+		@Override
+		public void onClick(View v) {
+			throw new UnsupportedOperationException();
+			
+		}
+    	
     }
 }

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -54,18 +55,44 @@ public class CallAnswerActivity extends BaseActivity {
 		// reject button
 		am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 		Button rejectCall = (Button) findViewById(R.id.rejectCallButton);
-		rejectCall.setOnLongClickListener(new OnLongClickListener() {
-          	public boolean onLongClick(View v){
-          		logMe("rejectCall onClick event");
-          		
-          		// i've got a shotgun...
-          		am.restartPackage("com.android.providers.telephony");
-          		// and you aint got one...
-          		am.restartPackage("com.android.phone");
-          		finishHim();
-          		return true;
-          	}
-		});
+		boolean enabled = getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ALLOW_REJECT_KEY, false);
+		if (enabled) {
+			rejectCall.setOnLongClickListener(new OnLongClickListener() {
+	          	public boolean onLongClick(View v){
+	          		logMe("rejectCall onClick event");
+	          		
+	          		// i've got a shotgun...
+	          		am.restartPackage("com.android.providers.telephony");
+	          		// and you aint got one...
+	          		am.restartPackage("com.android.phone");
+	          		finishHim();
+	          		return true;
+	          	}
+			});
+		}
+		else
+		{
+			rejectCall.setVisibility(View.GONE);			
+		}
+		
+		
+		// answer touch screen button
+		Button answerButton = (Button) findViewById(R.id.answerCallButton);
+		enabled = getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ANSWER_WITH_BUTTON_KEY, false);
+		if (enabled) {
+			answerButton.setOnLongClickListener(new OnLongClickListener() {
+	          	public boolean onLongClick(View v){
+	          		logMe("touch screen answer button onClick event");
+	          		answerCall();
+	          		return true;
+	          	}
+			});
+		}
+		else
+		{
+			answerButton.setVisibility(View.GONE);			
+		}		
+		
 	}
 	
 	@Override
@@ -103,9 +130,9 @@ public class CallAnswerActivity extends BaseActivity {
 		unHookReceiver();
 		if(!isFinishing()) {
 			logMe("giggle...");
-            Intent i = new Intent(getApplicationContext(),CallAnswerActivity.class);
-	        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-	        getApplicationContext().startActivity(i);
+			Intent i = new Intent(getApplicationContext(), CallAnswerIntentService.class);
+			i.putExtra("delay", Hc.STARTUP_DELAY);
+			startService(i);
 		}
 
 	}
@@ -216,21 +243,23 @@ public class CallAnswerActivity extends BaseActivity {
 		 *  code   - KEYCODE_HEADSETHOOK
 		 *  
 		 *  Broadcasting that intent answers the phone =)
+		 *  
+		 *  However, if there are any other apps that are listening for 
+		 *  ACTION_MEDIA_BUTTION intents and consuming them they won't get
+		 *  to the Phone app.
+		 *  
 		 */
 		KeyEvent fakeHeadsetPress =	new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_HEADSETHOOK);
 		Intent fakeHeadsetIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
 		
 		fakeHeadsetIntent.putExtra(Intent.EXTRA_KEY_EVENT, fakeHeadsetPress);
 		logMe("broadcasting ACTION_MEDIA_BUTTION intent with a KEYCODE_HEADSETHOOK code on an ACTION_DOWN action");
-
-
-		//unHookReceiver();  // onPause does this now.
 		
 		sendOrderedBroadcast(fakeHeadsetIntent, null);
 		moveTaskToBack(true);		
 		finish();		
 	}
-	
+
 	private void logMe(String s) {
 		super.logMe("CallAnswerActivity", s);
 	}
