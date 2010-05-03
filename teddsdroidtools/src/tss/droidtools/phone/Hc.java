@@ -10,7 +10,7 @@ import android.content.Context;
  */
 public class Hc {
 	public static final boolean DBG = true;
-	public static final long STARTUP_DELAY = 1000L;
+	public static final long STARTUP_DELAY = 3000L;
 	public static final long RESTART_DELAY = 500L;
 	public static final String LOG_TAG = "TeddsDroidTools";
 	public static final String PRE_TAG = ">";
