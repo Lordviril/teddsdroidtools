@@ -45,7 +45,7 @@ public class PhoneCallReceiver extends BaseReceiver {
 			
 			logMe("the phone is ringing, scheduling creation call answer screen activity");
 			Intent i = new Intent(context, CallAnswerIntentService.class);
-			i.putExtra("delay", 0L);
+			i.putExtra("delay", Hc.STARTUP_DELAY);
 			context.startService(i);
 			logMe("started, time to go back to listening");
 		}

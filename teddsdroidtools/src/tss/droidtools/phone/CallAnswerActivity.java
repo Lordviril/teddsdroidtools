@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -31,7 +30,6 @@ import android.widget.Button;
  */
 public class CallAnswerActivity extends BaseActivity {
 	protected BroadcastReceiver r;
-	private ActivityManager am;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +51,14 @@ public class CallAnswerActivity extends BaseActivity {
 		
 
 		// reject button
-		am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+		
 		Button rejectCall = (Button) findViewById(R.id.rejectCallButton);
 		boolean enabled = getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ALLOW_REJECT_KEY, false);
 		if (enabled) {
 			rejectCall.setOnLongClickListener(new OnLongClickListener() {
 	          	public boolean onLongClick(View v){
 	          		logMe("rejectCall onClick event");
-	          		
+	          		ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 	          		// i've got a shotgun...
 	          		am.restartPackage("com.android.providers.telephony");
 	          		// and you aint got one...
@@ -131,7 +129,7 @@ public class CallAnswerActivity extends BaseActivity {
 		if(!isFinishing()) {
 			logMe("giggle...");
 			Intent i = new Intent(getApplicationContext(), CallAnswerIntentService.class);
-			i.putExtra("delay", Hc.STARTUP_DELAY);
+			i.putExtra("delay", Hc.RESTART_DELAY);
 			startService(i);
 		}
 

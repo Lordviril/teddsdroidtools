@@ -6,6 +6,7 @@
     android:layout_height="fill_parent">
     
     <RelativeLayout
+    	android:id="@+id/cont1"
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
     	android:layout_centerInParent="true">
@@ -27,33 +28,37 @@
 			android:id="@+id/msg2" 
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content" 
-			android:text="@string/answer_msg2" 
+			android:text=" " 
 			android:layout_below="@id/msg1"
 			android:layout_centerHorizontal="true"
 			android:layout_marginBottom="90px" />    		
-    	<Button 
-			android:id="@+id/rejectCallButton"
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content"
-			android:text="@string/answer_msg5"
-			android:layout_below="@id/msg1"
-			android:layout_centerHorizontal="true"/>
-			
+
     	<Button 
 			android:id="@+id/answerCallButton"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
 			android:text="@string/answer_msg4"
-			android:layout_below="@id/rejectCallButton"
-			android:layout_centerHorizontal="true"/>
-
+			android:layout_below="@id/msg2"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="10px"
+			/>
+			
     	<Button 
 			android:id="@+id/returnToCallScreen"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
 			android:text="@string/answer_msg3"
-			android:layout_below="@id/msg2"
+			android:layout_below="@+id/answerCallButton"
 			android:layout_centerHorizontal="true"/>
 			
 	</RelativeLayout>
+	
+	<Button 
+			android:id="@+id/rejectCallButton"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:text="@string/answer_msg5"
+			
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"/>
 </RelativeLayout>

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+    	
+     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+     android:scrollbars="vertical"
+     android:layout_height="fill_parent"
+     android:layout_width="fill_parent"> 
+<RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -23,18 +28,17 @@
     	android:layout_centerHorizontal="true" />
     	
     	
-    	
-    	
+	
 	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
-	    android:stretchColumns="1"
+	    android:shrinkColumns="1"
+
 	    android:layout_below="@id/aboutMessage">
 
 	    <View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
-	        	
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
@@ -45,51 +49,91 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"/>
 	    </TableRow>
+		<TableRow>
+			<TextView android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="The master on/off switch for all of the Phone Tools.  Disabling this prevents any of the Call Answer features from running regardless of whether or not they are enabled."
+				/>
+		</TableRow>
+
 	    
 	   	<View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
-	        	
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
 	            android:text="Answer Calls With Camera Button"
-	            android:padding="3dip" />
-	            
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
 	        <CheckBox android:id="@+id/cameraAnswerCheckBox"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"/>
 	    </TableRow>
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will allow you to answer incoming calls by pressing down on the camera button"				
+				/>
+		</TableRow>
 
 	   	<View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
-	        	
-	    <TableRow>
+		<TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Answer Calls With Trackball Press"
-	            android:padding="3dip" />
-	            
+	            android:text="Answer Calls With Track Ball Press"
+	            android:padding="3dip" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
 	        <CheckBox android:id="@+id/trackballAnswerCheckBox"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"/>
 	    </TableRow>
-
-	   	<View
-	        android:layout_height="1dip"
-	        android:background="#FF909090" />
-	        	
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Answer Calls With Touchscreen Button"
-	            android:padding="3dip" />
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will allow you to answer incoming calls by pressing down on the track ball."				
+				/>
+		</TableRow>
+
+
+
+		<View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+		<TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:text="Answer Calls With Touch Screen Button"
+	            android:padding="3dip" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
 	            
 	        <CheckBox android:id="@+id/touchscreenButtonAnswerCheckBox"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"/>
 	    </TableRow>
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will display a touch screen button on the answer call screen which you may long press to answer the call with."				
+				/>
+		</TableRow>
+
 
 	   	<View
 	        android:layout_height="1dip"
@@ -99,65 +143,65 @@
 	        <TextView
 	            android:layout_column="1"
 	            android:text="Enable Reject Calls (Experimental)"
-	            android:padding="3dip" />
+	            android:padding="3dip" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
 	            
 	        <CheckBox android:id="@+id/rejectCallsCheckBox"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"/>
 	    </TableRow>
-<!--
-	    <View
-	        android:layout_height="1dip"
-	        android:background="#FF909090" />
-	        	    	    
-		<TableRow>
-	        <TextView
-	            android:layout_column="1"
-	            android:text="Answer Calls With The Camera Button"
-	            android:padding="3dip" />
-	            
-	        <CheckBox android:id="@+id/cameraAnswerCheckBox"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"/>
-	    </TableRow>
-	    
-	    <View
-	        android:layout_height="1dip"
-	        android:background="#FF909090" />
-
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Enable In-Call Screen Guard"
-	            android:padding="3dip" />
-	            
-	        <CheckBox android:id="@+id/darkScreenCheckBox"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"/>
-	    </TableRow>
- -->
- 
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will display a touch screen button on the answer call screen which you may long press to reject the call with."/>
+		</TableRow>
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="WARNING: this is a very experimental feature which may or may not work on your phone.  Rejecting a call with this this feature will restart the telephony and phone applications on your phone and your cell service will be interrupted until they finish restarting.  This will kill all phone calls incoming or ongoing and the rejected call will not be recorded in the call log."
+				/>
+		</TableRow>		
+
  	    <View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
-	        	
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
 	            android:text="Debug Logging"
-	            android:padding="3dip" />
+	            android:padding="3dip" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
 	            
 	        <CheckBox android:id="@+id/debugLoggingCheckBox"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"/>
 	    </TableRow>
-	    
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will turn debug logging on.  This will allow you to use log viewing utilities to examine this applications behavior and/or send diagnostic data to the developer."
+				/>
+		</TableRow>
+		
+			    
 	    <View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
 
 
 	</TableLayout>
-		   	
 
-</LinearLayout>
+
+</RelativeLayout>
+		   	</ScrollView>
