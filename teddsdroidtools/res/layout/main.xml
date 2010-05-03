@@ -54,7 +54,7 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="The master on/off switch for all of the Phone Tools.  Disabling this prevents any of the Call Answer features from running regardless of whether or not they are enabled."
+				android:text="This is the master on/off switch for all of the Phone Tools.  Disabling this prevents any of the Answer or Obliterate Call features from running regardless of whether or not they are enabled."
 				/>
 		</TableRow>
 
@@ -65,7 +65,7 @@
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Answer Calls With Camera Button"
+	            android:text="Answer Call With Camera Button"
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -89,7 +89,7 @@
 		<TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Answer Calls With Track Ball Press"
+	            android:text="Answer Call With Track Ball Press"
 	            android:padding="3dip" 
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -115,7 +115,7 @@
 		<TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Answer Calls With Touch Screen Button"
+	            android:text="Answer Call With Touch Screen Button"
 	            android:padding="3dip" 
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -142,7 +142,7 @@
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Enable Reject Calls (Experimental)"
+	            android:text="Enable Obliterate (Reject) Call - Experimental"
 	            android:padding="3dip" 
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>

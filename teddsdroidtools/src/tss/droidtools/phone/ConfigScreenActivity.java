@@ -21,8 +21,8 @@ public class ConfigScreenActivity extends BaseActivity {
         setContentView(R.layout.main);
 
         renderConfigCheckbox(Hc.PREF_PHONE_TOOLS_KEY,false,R.id.phoneToolsCheckBox,"Phone Tools");
-        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_CAMERA_KEY,false,R.id.cameraAnswerCheckBox,"Camera Button Answer");
-        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_TRACKBALL_KEY,false,R.id.trackballAnswerCheckBox,"Trackball Answer");
+        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_CAMERA_KEY,true,R.id.cameraAnswerCheckBox,"Camera Button Answer");
+        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_TRACKBALL_KEY,true,R.id.trackballAnswerCheckBox,"Trackball Answer");
         renderConfigCheckbox(Hc.PREF_ANSWER_WITH_BUTTON_KEY,false,R.id.touchscreenButtonAnswerCheckBox,"Touchscreen Button Answer");
         renderConfigCheckbox(Hc.PREF_ALLOW_REJECT_KEY,false,R.id.rejectCallsCheckBox,"Reject Call Feature");
         renderConfigCheckbox(Hc.PREF_DEBUG_LOGGING_KEY,true,R.id.debugLoggingCheckBox,"Debug Logging");
