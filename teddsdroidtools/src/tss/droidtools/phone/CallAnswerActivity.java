@@ -1,5 +1,8 @@
 package tss.droidtools.phone;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import tss.droidtools.BaseActivity;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -7,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.RemoteException;
+import com.android.internal.telephony.ITelephony;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -14,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
+
 /**
  *
  * Activity that gets called by the broadcast receiver when the phone rings.
@@ -58,11 +64,24 @@ public class CallAnswerActivity extends BaseActivity {
 			rejectCall.setOnLongClickListener(new OnLongClickListener() {
 	          	public boolean onLongClick(View v){
 	          		logMe("rejectCall onClick event");
-	          		ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
-	          		// i've got a shotgun...
-	          		am.restartPackage("com.android.providers.telephony");
-	          		// and you aint got one...
-	          		am.restartPackage("com.android.phone");
+//	          		ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+//	          		// i've got a shotgun...
+//	          		am.restartPackage("com.android.providers.telephony");
+//	          		// and you aint got one...
+//	          		am.restartPackage("com.android.phone");
+	          		
+	        		try {
+	        			TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+	        			Class c = Class.forName(tm.getClass().getName());
+	        			Method m = c.getDeclaredMethod("getITelephony");
+	        			m.setAccessible(true);
+	        			ITelephony t = (ITelephony)m.invoke(tm);
+	        			t.endCall();
+	        		} catch (Exception e) {
+	        			e.printStackTrace();
+	        		}
+	          		
+	          		
 	          		finishHim();
 	          		return true;
 	          	}
@@ -247,15 +266,27 @@ public class CallAnswerActivity extends BaseActivity {
 		 *  to the Phone app.
 		 *  
 		 */
-		KeyEvent fakeHeadsetPress =	new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_HEADSETHOOK);
-		Intent fakeHeadsetIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-		
-		fakeHeadsetIntent.putExtra(Intent.EXTRA_KEY_EVENT, fakeHeadsetPress);
-		logMe("broadcasting ACTION_MEDIA_BUTTION intent with a KEYCODE_HEADSETHOOK code on an ACTION_DOWN action");
-		
-		sendOrderedBroadcast(fakeHeadsetIntent, null);
-		moveTaskToBack(true);		
-		finish();		
+//		KeyEvent fakeHeadsetPress =	new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_HEADSETHOOK);
+//		Intent fakeHeadsetIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+//		
+//		fakeHeadsetIntent.putExtra(Intent.EXTRA_KEY_EVENT, fakeHeadsetPress);
+//		logMe("broadcasting ACTION_MEDIA_BUTTION intent with a KEYCODE_HEADSETHOOK code on an ACTION_DOWN action");
+//		
+//		sendOrderedBroadcast(fakeHeadsetIntent, null);
+//		moveTaskToBack(true);		
+//		finish();
+
+		// newer cooler kid...
+		try {
+			TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+			Class c = Class.forName(tm.getClass().getName());
+			Method m = c.getDeclaredMethod("getITelephony");
+			m.setAccessible(true);
+			ITelephony t = (ITelephony)m.invoke(tm);
+			t.answerRingingCall();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void logMe(String s) {
