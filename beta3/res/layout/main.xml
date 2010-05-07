@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+    	
+     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+     android:scrollbars="vertical"
+     android:layout_height="fill_parent"
+     android:layout_width="fill_parent"> 
+<RelativeLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+	<TextView 
+		android:id="@+id/titleMessage" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content"
+    	android:text="@string/app_name"
+    	android:layout_margin="20sp"
+    	android:layout_centerHorizontal="true" />
+    	
+	<TextView
+		android:id="@+id/aboutMessage" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content"
+    	android:text="@string/camera_answer_about"
+    	android:layout_below="@id/aboutMessage"
+    	android:layout_margin="30sp" 
+    	android:layout_centerHorizontal="true" />
+    	
+    	
+	
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:shrinkColumns="1"
+
+	    android:layout_below="@id/aboutMessage">
+
+	    <View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:text="Phone Tools"
+	            android:padding="3dip" />
+	            
+	        <CheckBox android:id="@+id/phoneToolsCheckBox"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+	    </TableRow>
+		<TableRow>
+			<TextView android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="This is the master on/off switch for all of the Phone Tools.  Disabling this prevents any of the Answer or Ignore Call features from running regardless of whether or not they are enabled."
+				/>
+		</TableRow>
+
+	    
+	   	<View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:text="Answer Call With Camera Button"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
+	        <CheckBox android:id="@+id/cameraAnswerCheckBox"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+	    </TableRow>
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will allow you to answer incoming calls by pressing down on the camera button"				
+				/>
+		</TableRow>
+
+	   	<View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+		<TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:text="Answer Call With Track Ball Press"
+	            android:padding="3dip" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
+	        <CheckBox android:id="@+id/trackballAnswerCheckBox"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+	    </TableRow>
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will allow you to answer incoming calls by pressing down on the track ball."				
+				/>
+		</TableRow>
+
+
+
+		<View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+		<TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:text="Answer Call With Touch Screen Button"
+	            android:padding="3dip" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
+	            
+	        <CheckBox android:id="@+id/touchscreenButtonAnswerCheckBox"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+	    </TableRow>
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will display a touch screen button on the answer call screen which you may long press to answer the call with."				
+				/>
+		</TableRow>
+
+
+	   	<View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+	        	
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:text="Enable Reject/Ignore Call"
+	            android:padding="3dip" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
+	            
+	        <CheckBox android:id="@+id/rejectCallsCheckBox"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+	    </TableRow>
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will display a touch screen button on the answer call screen which you may long press to ignore the call with."/>
+		</TableRow>
+
+ 	    <View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:text="Debug Logging"
+	            android:padding="3dip" 
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"/>
+	            
+	        <CheckBox android:id="@+id/debugLoggingCheckBox"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+	    </TableRow>
+	    <TableRow>
+	        <TextView
+	            android:layout_column="1"
+	            android:padding="3dip"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:text="Enabling this will turn debug logging on.  This will allow you to use log viewing utilities to examine this applications behavior and/or send diagnostic data to the developer."
+				/>
+		</TableRow>
+		
+			    
+	    <View
+	        android:layout_height="1dip"
+	        android:background="#FF909090" />
+
+
+	</TableLayout>
+
+
+</RelativeLayout>
+		   	</ScrollView>
