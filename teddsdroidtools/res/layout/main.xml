@@ -54,7 +54,7 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="This is the master on/off switch for all of the Phone Tools.  Disabling this prevents any of the Answer or Obliterate Call features from running regardless of whether or not they are enabled."
+				android:text="This is the master on/off switch for all of the Phone Tools.  Disabling this prevents any of the Answer or Ignore Call features from running regardless of whether or not they are enabled."
 				/>
 		</TableRow>
 
@@ -142,7 +142,7 @@
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Enable Obliterate (Reject) Call - Experimental"
+	            android:text="Enable Reject/Ignore Call"
 	            android:padding="3dip" 
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -157,17 +157,8 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="Enabling this will display a touch screen button on the answer call screen which you may long press to reject the call with."/>
+				android:text="Enabling this will display a touch screen button on the answer call screen which you may long press to ignore the call with."/>
 		</TableRow>
-	    <TableRow>
-	        <TextView
-	            android:layout_column="1"
-	            android:padding="3dip"
-				android:layout_height="wrap_content" 
-				android:layout_width="wrap_content"
-				android:text="WARNING: this is a very experimental feature which may or may not work on your phone.  Rejecting a call with this this feature will restart the telephony and phone applications on your phone and your cell service will be interrupted until they finish restarting.  This will kill all phone calls incoming or ongoing and the rejected call will not be recorded in the call log."
-				/>
-		</TableRow>		
 
  	    <View
 	        android:layout_height="1dip"

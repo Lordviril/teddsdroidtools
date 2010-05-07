@@ -9,7 +9,6 @@ import android.util.Log;
 public class BaseActivity extends Activity {
 	protected SharedPreferences p;
 	protected Boolean debugOn;
-
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +17,10 @@ public class BaseActivity extends Activity {
 		debugOn = Hc.debugEnabled(getApplicationContext());
 	}
 	
-	protected void logMe(String extra,String s) {
+	protected void debugLog(String extra,String s) {
 		if (debugOn) Log.d(Hc.LOG_TAG, Hc.PRE_TAG + extra + Hc.POST_TAG + " "+ s);
+	}
+	protected void errorLog(String extra,String s) {
+		if (debugOn) Log.e(Hc.LOG_TAG, Hc.PRE_TAG + extra + Hc.POST_TAG + " "+ s);
 	}
 }

@@ -1,6 +1,5 @@
 package tss.droidtools.phone;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import tss.droidtools.BaseActivity;
@@ -35,261 +34,366 @@ import android.widget.Button;
  *
  */
 public class CallAnswerActivity extends BaseActivity {
+	/**
+	 * whether or not to use the AIDL technique or 
+	 * the HEADSET_HOOK/package restart techniques
+	 */
+	private static final boolean USE_ITELEPHONY = true;
+	
+	/**
+	 * internal phone state broadcast receiver
+	 */
 	protected BroadcastReceiver r;
 	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	/**
+	 * AIDL access to the telephony service process
+	 */
+	private ITelephony telephonyService;
+
+	// ------------------------------------------------------------------------
+	// primary life cycle call backs
+	// ------------------------------------------------------------------------
+
+	/**
+	 * main() :)
+	 */
+	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		logMe("onCreate called");
-
-		// turn receivers on prior to drawing screen.
-		registerReciever();
+		debugLog("onCreate called");
 		setContentView(R.layout.callanswerscreen);
-
-		// return button
-		Button returnToCallScreen = (Button) findViewById(R.id.returnToCallScreen);
-		returnToCallScreen.setOnClickListener(new OnClickListener()	{
-          	public void onClick(View v) {
-          		logMe("returnToCallScreen onClick event");
-          		finishHim();
-          	}
-		});
 		
-
-		// reject button
+		// connect to the underlying Android telephony system
+		if (USE_ITELEPHONY)
+			connectToTelephonyService();
 		
-		Button rejectCall = (Button) findViewById(R.id.rejectCallButton);
-		boolean enabled = getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ALLOW_REJECT_KEY, false);
-		if (enabled) {
-			rejectCall.setOnLongClickListener(new OnLongClickListener() {
-	          	public boolean onLongClick(View v){
-	          		logMe("rejectCall onClick event");
-//	          		ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
-//	          		// i've got a shotgun...
-//	          		am.restartPackage("com.android.providers.telephony");
-//	          		// and you aint got one...
-//	          		am.restartPackage("com.android.phone");
-	          		
-	        		try {
-	        			TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-	        			Class c = Class.forName(tm.getClass().getName());
-	        			Method m = c.getDeclaredMethod("getITelephony");
-	        			m.setAccessible(true);
-	        			ITelephony t = (ITelephony)m.invoke(tm);
-	        			t.endCall();
-	        		} catch (Exception e) {
-	        			e.printStackTrace();
-	        		}
-	          		
-	          		
-	          		finishHim();
-	          		return true;
-	          	}
-			});
-		}
-		else
-		{
-			rejectCall.setVisibility(View.GONE);			
-		}
-		
-		
-		// answer touch screen button
-		Button answerButton = (Button) findViewById(R.id.answerCallButton);
-		enabled = getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ANSWER_WITH_BUTTON_KEY, false);
-		if (enabled) {
-			answerButton.setOnLongClickListener(new OnLongClickListener() {
-	          	public boolean onLongClick(View v){
-	          		logMe("touch screen answer button onClick event");
-	          		answerCall();
-	          		return true;
-	          	}
-			});
-		}
-		else
-		{
-			answerButton.setVisibility(View.GONE);			
-		}		
-		
-	}
-	
-	@Override
-	protected void onStart() {
-		logMe("onStart");
-		super.onStart();
-	}
-
-
-	//
-	// putting the register/unhook of the reciever in
-	// resume/pause instead of stop/start beause we cannot
-	// guarantee that onStop will always be called (e.g.
-	// system kills this activity because it needs memory).
-	// 
-	// This may be overkill for the answer screen.
-	//
-	@Override
-	protected void onResume() {
-		logMe("onResume");
+		// turn our idle phone state receiver on
 		registerReciever();
-		super.onResume();
 		
+
+
+		// touch screen return button
+		Button returnToCallScreen = (Button) findViewById(R.id.returnToCallScreen);
+		returnToCallScreen.setOnClickListener(new ReturnButtonOnClickListener());
+
+		// touch screen reject/ignore call button
+		Button rejectCall = (Button) findViewById(R.id.rejectCallButton);
+		if (getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ALLOW_REJECT_KEY, false)) 
+			rejectCall.setOnLongClickListener(new RejectCallOnLongClickListener());
+		else 
+			rejectCall.setVisibility(View.GONE);			
+
+		// touch screen answer button
+		Button answerButton = (Button) findViewById(R.id.answerCallButton);
+		if (getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ANSWER_WITH_BUTTON_KEY, false)) 
+			answerButton.setOnLongClickListener(new AnswerCallOnLongClickListener());
+		else 
+			answerButton.setVisibility(View.GONE);			
+	}
+
+	/** 
+	 * (re)register phone state receiver on resume, exit if the phone is idle 
+	 */
+	@Override protected void onResume() {
+		super.onResume();
+
+		registerReciever();
+
 		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		if (tm.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
-			logMe("Hey! the phone is idle. stopping");
-			finishHim();
+			debugLog("phone is idle, stopping.");
+			exitCleanly();
 		}
 	}
-	
-	@Override
-	protected void onPause() {
+
+	/** 
+	 * unregister phone state receiver, schedule restart if not exiting at the users request 
+	 */
+	@Override protected void onPause() {
 		super.onPause();
-		logMe("paused");
+		
 		unHookReceiver();
-		if(!isFinishing()) {
-			logMe("giggle...");
+		
+		if (!isFinishing()) 
+		{
+			debugLog("system forced pause occured, scheduling delayed restart");
 			Intent i = new Intent(getApplicationContext(), CallAnswerIntentService.class);
 			i.putExtra("delay", Hc.RESTART_DELAY);
 			startService(i);
 		}
-
-	}
-
-	protected void onStop() {
-		logMe("stopped, finishing? "+isFinishing());
-		super.onStop();
 	}
 	
-	protected void onDestroy() {
-		logMe("destroyed");
-		super.onStop();
-	}
+	// ------------------------------------------------------------------------
+	// Input event handler call backs
+	// ------------------------------------------------------------------------
+	
+	/** 
+	 * Track ball press event handler that will answer a call 
+	 */
+	@Override public boolean onTrackballEvent(MotionEvent event) {
 
-	/** track ball version for our friends with Nexus Ones */
-	@Override
-	public boolean onTrackballEvent(MotionEvent event) {
-		switch(event.getAction()){
-		case MotionEvent.ACTION_MOVE:
-			// gets called a LOT! ignore ;)
-			return true;
-		case MotionEvent.ACTION_DOWN:
-			answerCall();
-			return true;
-		default:
-			logMe("trackball event: "+event);
+		switch(event.getAction())
+		{
+		case MotionEvent.ACTION_MOVE: return true;
+		case MotionEvent.ACTION_DOWN: answerCall(); return true;
+		default: debugLog("trackball event: "+event);
 		}
 		return super.dispatchTrackballEvent(event);
 	}
 	
-	/** broadcast HEADSETHOOK when the camera button is pressed*/
-	@Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
+	/**
+	 * Camera button press event handler that will answer a call
+	 */
+	@Override public boolean dispatchKeyEvent(KeyEvent event) {
 		
-		switch (event.getKeyCode()) {
-		case KeyEvent.KEYCODE_FOCUS:
-			/*
-			 * this event occurs when you press down lightly on the camera button
-			 * e.g. auto focus.  The event happens a lot even when you press down
-			 * hard (as the button is on its way down to the "hard press").
-			 * returning true to consume the event and prevent further processing of 
-			 * it by other apps 
-			 */ 
-			return true;
-			
-		case KeyEvent.KEYCODE_CAMERA:
-			answerCall();
-			return true;
-			
-		default:
-			logMe("Unknown key event: "+event);
-			break;
+		switch (event.getKeyCode()) 
+		{
+		case KeyEvent.KEYCODE_FOCUS: return true;
+		case KeyEvent.KEYCODE_CAMERA: answerCall(); return true;
+		default: debugLog("Unknown key event: "+event);
 		}
-		
 		return super.dispatchKeyEvent(event);
 	}
-	
-	
-	public void finishHim() {
-		unHookReceiver();
-		finish();
+
+	/**
+	 * Return button click listener will exit back to the
+	 * phones stock answer call application.
+	 */
+	private class ReturnButtonOnClickListener implements OnClickListener {
+		@Override public void onClick(View v) {
+			debugLog("returnToCallScreen onClick event");
+			exitCleanly();
+		}
 	}
 	
-	public void registerReciever() {
+	/**
+	 * Reject button long click listener will reject the
+	 * incoming call. 
+	 */
+	private class RejectCallOnLongClickListener implements OnLongClickListener {
+      	@Override public boolean onLongClick(View v){
+      		debugLog("touch screen ignore call button onClick event");
+      		ignoreCall();
+      		exitCleanly();
+      		return true;
+      	}		
+	}
+
+	/**
+	 * Answer button long click listener will answer the
+	 * incoming call.
+	 */
+	private class AnswerCallOnLongClickListener implements OnLongClickListener {
+		@Override public boolean onLongClick(View v){
+			debugLog("touch screen answer button onClick event");
+			answerCall();
+			return true;
+		}		
+	}
+	
+	// ------------------------------------------------------------------------
+	// broadcast receivers
+	// ------------------------------------------------------------------------
+
+	/**
+	 * register phone state receiver 
+	 */
+	private void registerReciever() {
 		if (r != null) return;
 
-		logMe("registering PHONE_STATE receiver");
 		r = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context c, Intent i) 	{
-				
 				String phone_state = i.getStringExtra(TelephonyManager.EXTRA_STATE);
 				if (!phone_state.equals(TelephonyManager.EXTRA_STATE_RINGING)) 
 				{
-					logMe("received "+phone_state+", time to go bye bye, thanks for playing!");
-					finishHim();
+					debugLog("received "+phone_state+", time to go bye bye, thanks for playing!");
+					exitCleanly();
 				}
 			} 
 		};
-		
-		this.registerReceiver(r, new IntentFilter("android.intent.action.PHONE_STATE"));
+
+		registerReceiver(r, new IntentFilter("android.intent.action.PHONE_STATE"));
 	}
 
-	/** 
-	 * unregister the broadcast receiver in charge of exiting out of the app when the phone
-	 * goes into OFFHOOK or IDLE. 
+	/**
+	 * unregister phone state receiver 
 	 */
-	public void unHookReceiver() {
-
+	private void unHookReceiver() {
 		if (r != null) 
 		{
-			logMe("unhooking the reciever");
-			this.unregisterReceiver(r);
+			unregisterReceiver(r);
 			r = null;
-			logMe("done");
 		}
 	}
 	
-	private void answerCall() {
-		/*
-		 * The "magic" goes here.  
-		 * 
-		 * Programmatically mimic the press of the button on a head set used to answer
-		 * an incoming call.  The recipe to do this is as follows:
-		 * 
-		 *  intent - ACTION_MEDIA_BUTTON
-		 *  action - ACTION_DOWN
-		 *  code   - KEYCODE_HEADSETHOOK
-		 *  
-		 *  Broadcasting that intent answers the phone =)
-		 *  
-		 *  However, if there are any other apps that are listening for 
-		 *  ACTION_MEDIA_BUTTION intents and consuming them they won't get
-		 *  to the Phone app.
-		 *  
-		 */
-//		KeyEvent fakeHeadsetPress =	new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_HEADSETHOOK);
-//		Intent fakeHeadsetIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-//		
-//		fakeHeadsetIntent.putExtra(Intent.EXTRA_KEY_EVENT, fakeHeadsetPress);
-//		logMe("broadcasting ACTION_MEDIA_BUTTION intent with a KEYCODE_HEADSETHOOK code on an ACTION_DOWN action");
-//		
-//		sendOrderedBroadcast(fakeHeadsetIntent, null);
-//		moveTaskToBack(true);		
-//		finish();
-
-		// newer cooler kid...
-		try {
+	// ------------------------------------------------------------------------
+	// application methods
+	// ------------------------------------------------------------------------
+	
+	/** 
+	 * get an instance of ITelephony to talk handle calls with 
+	 */
+	@SuppressWarnings("unchecked") private void connectToTelephonyService() {
+		try 
+		{
 			TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+
+			// "cheat" with Java reflection to gain access to TelephonyManager's ITelephony getter
 			Class c = Class.forName(tm.getClass().getName());
 			Method m = c.getDeclaredMethod("getITelephony");
 			m.setAccessible(true);
-			ITelephony t = (ITelephony)m.invoke(tm);
-			t.answerRingingCall();
+			telephonyService = (ITelephony)m.invoke(tm);
+
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+			debugLog("FATAL ERROR: could not connect to telephony subsystem");
+			debugLog("Exception object: "+e);
+			finish();
+		}		
+	}
+	
+	//
+	// answer call
+	//
+	
+	/** 
+	 * answer incoming calls
+	 */
+	private void answerCall() {
+		if (USE_ITELEPHONY)
+			answerCallAidl();
+		else
+			answerCallHeadsetHook();
+		
+		exitCleanly();
+	}
+	
+	/**
+	 * ACTION_MEDIA_BUTTON broadcast technique for answering the phone
+	 */
+	private void answerCallHeadsetHook() {
+		KeyEvent headsetHook =	new KeyEvent(KeyEvent.ACTION_DOWN,KeyEvent.KEYCODE_HEADSETHOOK);
+		Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+		mediaButtonIntent.putExtra(Intent.EXTRA_KEY_EVENT, headsetHook);
+		sendOrderedBroadcast(mediaButtonIntent, null);
 	}
 
-	private void logMe(String s) {
-		super.logMe("CallAnswerActivity", s);
+	/**
+	 * AIDL/ITelephony technique for answering the phone
+	 */
+	private void answerCallAidl() {
+		try {
+			telephonyService.answerRingingCall();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			errorLog("FATAL ERROR: call to service method answerRiningCall failed.");
+			errorLog("Exception object: "+e);
+		}		
+	}
+
+	//
+	// ignore call
+	//
+	
+	/**
+	 * ignore incoming calls 
+	 */
+	private void ignoreCall() {
+		if (USE_ITELEPHONY)
+			ignoreCallAidl();
+		else
+			ignoreCallPackageRestart();
+	}
+	
+	/**
+	 * package restart technique for ignoring calls 
+	 */
+	private void ignoreCallPackageRestart() {
+		ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+		am.restartPackage("com.android.providers.telephony");
+		am.restartPackage("com.android.phone");
+	}
+	
+	/** 
+	 * AIDL/ITelephony technique for ignoring calls
+	 */
+	private void ignoreCallAidl() {
+		try 
+		{
+			telephonyService.endCall();
+		} 
+		catch (RemoteException e) 
+		{
+			e.printStackTrace();
+			errorLog("FATAL ERROR: call to service method endCall failed.");
+			errorLog("Exception object: "+e);
+		}
+	}	
+	
+	/** 
+	 * cleanup and exit routine
+	 */
+	private void exitCleanly() {
+		unHookReceiver();
+		moveTaskToBack(true);		
+		finish();
+	}
+
+	// ------------------------------------------------------------------------
+	// debugging
+	// ------------------------------------------------------------------------
+	
+	@Override protected void onStart() {
+		super.onStart();
+		debugLog("onStart");
+	}
+	
+	@Override protected void onStop() {
+		super.onStop();
+		debugLog("stopped, finishing? "+isFinishing());
+	}
+	
+	@Override protected void onDestroy() {
+		super.onStop();
+		debugLog("destroyed");
+	}
+	
+	private void debugLog(String s) {
+		super.debugLog("CallAnswerActivity", s);
+	}
+	private void errorLog(String s) {
+		super.errorLog("CallAnswerActivity", s);
 	}
 }
+
+
+/*
+ * 
+ * Notes
+ * 
+ * I. KEYCODE_HEADSETHOOK
+ * The "magic" goes here.  
+ * 
+ * Programmatically mimic the press of the button on a head set used to answer
+ * an incoming call.  The recipe to do this is as follows:
+ * 
+ *  intent - ACTION_MEDIA_BUTTON
+ *  action - ACTION_DOWN
+ *  code   - KEYCODE_HEADSETHOOK
+ *  
+ *  Broadcasting that intent answers the phone =)
+ *  
+ *  However, if there are any other apps that are listening for 
+ *  ACTION_MEDIA_BUTTION intents and consuming them they won't get
+ *  to the Phone app.
+ *  
+ *
+ * II.
+ * case KeyEvent.KEYCODE_FOCUS:
+ * this event occurs when you press down lightly on the camera button
+ * e.g. auto focus.  The event happens a lot even when you press down
+ * hard (as the button is on its way down to the "hard press").
+ * returning true to consume the event and prevent further processing of 
+ * it by other apps 
+ * 
+*/
