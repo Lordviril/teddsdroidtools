@@ -49,6 +49,19 @@ public class PhoneCallReceiver extends BaseReceiver {
 			context.startService(i);
 			logMe("started, time to go back to listening");
 		}
+		if (phone_state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK))
+		{
+			Intent i = new Intent(context,InCallScreenGuardService.class);
+			logMe("starting screen guard service");
+			context.startService(i);
+		}
+		if (phone_state.equals(TelephonyManager.EXTRA_STATE_IDLE))
+		{
+			Intent i = new Intent(context,InCallScreenGuardService.class);
+			logMe("stopping screen guard service");
+			context.stopService(i);
+		}
+		
 		return;
 	}
 	

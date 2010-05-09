@@ -25,6 +25,15 @@
 			android:taskAffinity=""
 			android:theme="@android:style/Theme.Translucent.NoTitleBar"
 			android:screenOrientation="portrait" />
+			
+		<activity
+			android:name=".InCallScreenGuardActivity"
+			android:label="InCallScreenGuardActivity"
+			android:excludeFromRecents="true"
+			android:launchMode="standard"
+			android:taskAffinity=""
+			android:screenOrientation="portrait">
+		</activity>
 
 		<receiver android:name=".PhoneCallReceiver" android:enabled="true">
 			<intent-filter>
@@ -32,6 +41,7 @@
 			</intent-filter>
 		</receiver>
 		<service android:name="CallAnswerIntentService" />
+		<service android:name="InCallScreenGuardService" />
 	</application>
 	
 	<!--  

@@ -46,6 +46,11 @@ public class CallAnswerActivity extends BaseActivity {
 	protected BroadcastReceiver r;
 	
 	/**
+	 * TelephonyManager instance used by this activity
+	 */
+	private TelephonyManager tm;
+	
+	/**
 	 * AIDL access to the telephony service process
 	 */
 	private ITelephony telephonyService;
@@ -61,6 +66,9 @@ public class CallAnswerActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		debugLog("onCreate called");
 		setContentView(R.layout.callanswerscreen);
+		
+		// grab an instance of telephony manager
+		tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		
 		// connect to the underlying Android telephony system
 		if (USE_ITELEPHONY)
@@ -98,7 +106,6 @@ public class CallAnswerActivity extends BaseActivity {
 
 		registerReciever();
 
-		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		if (tm.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
 			debugLog("phone is idle, stopping.");
 			exitCleanly();
@@ -236,8 +243,6 @@ public class CallAnswerActivity extends BaseActivity {
 	@SuppressWarnings("unchecked") private void connectToTelephonyService() {
 		try 
 		{
-			TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-
 			// "cheat" with Java reflection to gain access to TelephonyManager's ITelephony getter
 			Class c = Class.forName(tm.getClass().getName());
 			Method m = c.getDeclaredMethod("getITelephony");
@@ -264,6 +269,12 @@ public class CallAnswerActivity extends BaseActivity {
 			answerCallAidl();
 		else
 			answerCallHeadsetHook();
+
+//		Intent i = new Intent();
+//		i.setClassName("tss.droidtools.phone","tss.droidtools.phone.InCallScreenGuardActivity");
+//		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+//		debugLog("starting screen guard");
+//		startActivity(i);
 		
 		exitCleanly();
 	}
