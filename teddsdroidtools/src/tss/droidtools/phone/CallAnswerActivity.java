@@ -85,14 +85,14 @@ public class CallAnswerActivity extends BaseActivity {
 
 		// touch screen reject/ignore call button
 		Button rejectCall = (Button) findViewById(R.id.rejectCallButton);
-		if (getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ALLOW_REJECT_KEY, false)) 
+		if (getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ALLOW_REJECT_KEY, true)) 
 			rejectCall.setOnLongClickListener(new RejectCallOnLongClickListener());
 		else 
 			rejectCall.setVisibility(View.GONE);			
 
 		// touch screen answer button
 		Button answerButton = (Button) findViewById(R.id.answerCallButton);
-		if (getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ANSWER_WITH_BUTTON_KEY, false)) 
+		if (getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_ANSWER_WITH_BUTTON_KEY, true)) 
 			answerButton.setOnLongClickListener(new AnswerCallOnLongClickListener());
 		else 
 			answerButton.setVisibility(View.GONE);			
@@ -270,12 +270,6 @@ public class CallAnswerActivity extends BaseActivity {
 		else
 			answerCallHeadsetHook();
 
-//		Intent i = new Intent();
-//		i.setClassName("tss.droidtools.phone","tss.droidtools.phone.InCallScreenGuardActivity");
-//		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-//		debugLog("starting screen guard");
-//		startActivity(i);
-		
 		exitCleanly();
 	}
 	
@@ -294,6 +288,7 @@ public class CallAnswerActivity extends BaseActivity {
 	 */
 	private void answerCallAidl() {
 		try {
+			telephonyService.silenceRinger();
 			telephonyService.answerRingingCall();
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -331,6 +326,7 @@ public class CallAnswerActivity extends BaseActivity {
 	private void ignoreCallAidl() {
 		try 
 		{
+			telephonyService.silenceRinger();
 			telephonyService.endCall();
 		} 
 		catch (RemoteException e) 

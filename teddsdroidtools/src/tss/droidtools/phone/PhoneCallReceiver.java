@@ -31,10 +31,9 @@ public class PhoneCallReceiver extends BaseReceiver {
 		debugOn = Hc.debugEnabled(context);
 		
 		/* make sure the feature is enabled */
-		boolean enabled = context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_PHONE_TOOLS_KEY, false);
-		if (!enabled) 
+		if (!context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_PHONE_TOOLS_KEY, true)) 
 		{
-			logMe("feature disabled. ");
+			logMe("All Phone Tools have been disabled by user. ");
 			return;
 		} 
 
@@ -42,24 +41,38 @@ public class PhoneCallReceiver extends BaseReceiver {
 		String phone_state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 		if (phone_state.equals(TelephonyManager.EXTRA_STATE_RINGING)) 
 		{
-			
-			logMe("the phone is ringing, scheduling creation call answer screen activity");
-			Intent i = new Intent(context, CallAnswerIntentService.class);
-			i.putExtra("delay", Hc.STARTUP_DELAY);
-			context.startService(i);
-			logMe("started, time to go back to listening");
+			if (context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_CALL_ANSWER_TOOLS_KEY, true))
+			{
+				logMe("Phone Ringing: the phone is ringing, scheduling creation call answer screen activity");
+				Intent i = new Intent(context, CallAnswerIntentService.class);
+				i.putExtra("delay", Hc.STARTUP_DELAY);
+				context.startService(i);
+				logMe("Phone Ringing: started, time to go back to listening");
+			} else {
+				logMe("Phone Ringing: Call Answer tools disabled by user");
+			}
 		}
 		if (phone_state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK))
 		{
-			Intent i = new Intent(context,InCallScreenGuardService.class);
-			logMe("starting screen guard service");
-			context.startService(i);
+			if (context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_SCREEN_GUARD_TOOLS_KEY, true))
+			{
+				Intent i = new Intent(context,InCallScreenGuardService.class);
+				logMe("Phone Offhook: starting screen guard service");
+				context.startService(i);
+			} else {
+				logMe("Phone Offhook: In-Call Screen Guard disabled by user");
+			}
 		}
 		if (phone_state.equals(TelephonyManager.EXTRA_STATE_IDLE))
 		{
-			Intent i = new Intent(context,InCallScreenGuardService.class);
-			logMe("stopping screen guard service");
-			context.stopService(i);
+			if (context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_SCREEN_GUARD_TOOLS_KEY, true))
+			{
+				Intent i = new Intent(context,InCallScreenGuardService.class);
+				logMe("Phone Idle: stopping screen guard service");
+				context.stopService(i);
+			} else {
+				logMe("Phone Idle: In-Call Screen Guard disabled by user");
+			}
 		}
 		
 		return;

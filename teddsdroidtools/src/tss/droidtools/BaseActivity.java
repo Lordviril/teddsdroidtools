@@ -21,6 +21,6 @@ public class BaseActivity extends Activity {
 		if (debugOn) Log.d(Hc.LOG_TAG, Hc.PRE_TAG + extra + Hc.POST_TAG + " "+ s);
 	}
 	protected void errorLog(String extra,String s) {
-		if (debugOn) Log.e(Hc.LOG_TAG, Hc.PRE_TAG + extra + Hc.POST_TAG + " "+ s);
+		Log.e(Hc.LOG_TAG, Hc.PRE_TAG + extra + Hc.POST_TAG + " "+ s);
 	}
 }

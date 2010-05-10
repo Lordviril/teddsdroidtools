@@ -7,4 +7,5 @@
 	<string name="answer_msg3">Return To Regular Call Screen</string>
 	<string name="answer_msg4">Long Press To Answer</string>
 	<string name="answer_msg5">Long Press To Obliterate Call</string>
+	<string name="screen_guard_msg1">Tedd\'s In-Call Screen Guard</string>
 </resources>
