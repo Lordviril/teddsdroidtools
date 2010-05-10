@@ -15,6 +15,15 @@ public class InCallScreenGuardService extends Service {
 
 		debugLog("onStart");
 		registerScreenOffReceiver();
+		// pause
+		try {
+			Long delay = (Long)i.getExtras().get("delay");
+			debugLog("pausing for "+delay+" millis");
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		debugLog("now starting screen guard");
 		startScreenGuardActivity(getBaseContext());
 	}
 	

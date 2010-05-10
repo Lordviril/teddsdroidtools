@@ -57,6 +57,7 @@ public class PhoneCallReceiver extends BaseReceiver {
 			if (context.getSharedPreferences(Hc.PREFSNAME,0).getBoolean(Hc.PREF_SCREEN_GUARD_TOOLS_KEY, true))
 			{
 				Intent i = new Intent(context,InCallScreenGuardService.class);
+				i.putExtra("delay", Hc.STARTUP_DELAY);
 				logMe("Phone Offhook: starting screen guard service");
 				context.startService(i);
 			} else {
