@@ -46,7 +46,7 @@ public class InCallScreenGuardActivity extends BaseActivity {
 		@Override public boolean onLongClick(View v){
 			debugLog("exit screen guard button onClick event");
 			moveTaskToBack(true);
-			finish();
+			//finish();
 			return true;
 		}		
 	}	
