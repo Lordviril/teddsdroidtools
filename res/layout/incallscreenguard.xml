@@ -11,8 +11,8 @@
    		android:layout_height="wrap_content"
    		android:text="@string/screen_guard_msg1"
    		android:layout_centerInParent="true"
-   		android:textColor="#FFAA00"
-   		android:background="#000000"
+   		android:textColor="@color/tdt_activity_msg_color_1"
+   		android:background="@color/black"
       	android:typeface="monospace"
    		android:textSize="14sp"
    		android:textStyle="bold"
@@ -23,7 +23,7 @@
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
 		android:layout_centerHorizontal="true"
-		android:text="Long Press To Exit"
+		android:text="@string/longpress_exit_button_label"
 		android:layout_below="@id/inCallScreenGuardmsg1"
 		/>
 </RelativeLayout>

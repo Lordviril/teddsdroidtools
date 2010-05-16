@@ -24,14 +24,14 @@
 
 	<!-- 
 	MASTER ON/OFF
-	 -->
+
 
     	
 	<TextView
 		android:id="@+id/aboutMessage" 
     	android:layout_width="fill_parent" 
     	android:layout_height="wrap_content"
-    	android:text="All Phone Tools"
+    	android:text="@string/all_phone_tools_title"
     	android:textStyle="bold"
     	android:layout_below="@id/titleMessage"
     	android:background="#333333"
@@ -51,7 +51,7 @@
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="All Phone Tools (On/Off)"
+	            android:text="@string/all_phone_tools_pref_title"
 	            android:padding="3dip" />
 	            
 	        <CheckBox android:id="@+id/phoneToolsCheckBox"
@@ -64,24 +64,25 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="This is the master on/off switch for all of the Phone Tools.  Disabling this prevents all of the Answer, Ignore Call and In-Call Screen Guard features from running regardless of whether or not they are enabled below."
+				android:text="@string/all_phone_tools_pref_summary"
 				/>
 		</TableRow>
 	   	<View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
 	</TableLayout>
-	
+		 -->
+		 
 	<!-- 
 	CALL ANSWERING
-	 -->
+
 	
 	<View
 		android:id="@+id/pad1"
 		android:layout_height="30dip"
 		android:layout_width="fill_parent"
 		android:background="#000000" 
-		android:layout_below="@id/table1"/>
+		android:layout_below="@id/titleMessage"/>
 
 	<TextView
 		android:id="@+id/callAnsweringTitle"
@@ -90,7 +91,7 @@
 		android:layout_height="wrap_content" 
 		android:layout_width="fill_parent"
 		android:textStyle="bold"
-		android:text="Call Answering Tools"
+		android:text="@string/call_answer_tools_title"
 		android:gravity="center"
 		android:background="#333333"
 		android:layout_centerHorizontal="true"
@@ -109,7 +110,7 @@
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Call Answer Tools (On/Off)"
+	            android:text="@string/call_answer_tools_pref_title"
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -124,17 +125,22 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="This is the master on/off switch for the call answering tools (Answer and Ignore Call features)."				
+				android:text="@string/call_answer_tools_pref_summary"				
 				/>
 		</TableRow>
 	    
 	   	<View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
+
+
+
+
+
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Answer Call With Camera Button"
+	            android:text="@string/camera_answer_pref_title"
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -149,17 +155,22 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="Enabling this will allow you to answer incoming calls by pressing down on the camera button."				
+				android:text="@string/camera_answer_pref_summary"				
 				/>
 		</TableRow>
 
 	   	<View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
+
+
+
+
+
 		<TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Answer Call With Track Ball Press"
+	            android:text="@string/trackball_answer_pref_title"
 	            android:padding="3dip" 
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -174,19 +185,22 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="Enabling this will allow you to answer incoming calls by pressing down on the track ball."				
+				android:text="@string/trackball_answer_pref_summary"				
 				/>
 		</TableRow>
-
-
 
 		<View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
+
+
+
+
+
 		<TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Answer Call With Touch Screen Button"
+	            android:text="@string/button_answer_pref_title"
 	            android:padding="3dip" 
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -202,19 +216,23 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="Enabling this will display a touch screen button on the answer call screen which you may long press to answer the call with."				
+				android:text="@string/button_answer_pref_summary"				
 				/>
 		</TableRow>
-
 
 	   	<View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
+
+
+
+
+
 	        	
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="Enable Reject/Ignore Call"
+	            android:text="@string/reject_call_pref_title"
 	            android:padding="3dip" 
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -230,17 +248,17 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"
-				android:text="Enabling this will display a touch screen button on the answer call screen which you may long press to ignore the call with."/>
+				android:text="@string/reject_call_pref_summary"/>
 		</TableRow>
 		<View
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
-		
-	</TableLayout>
 
+	</TableLayout>
+	-->
 	<!-- 
 	IN CALL SCREEN GUARD
-	 -->
+
 	<View
 		android:id="@+id/pad2"
 		android:layout_height="30dip"
@@ -255,7 +273,7 @@
 		android:layout_height="wrap_content" 
 		android:layout_width="fill_parent"
 		android:textStyle="bold"
-		android:text="In-Call Screen Guard"
+		android:text="@string/screen_guard_title"
 		android:gravity="center"
 		android:background="#333333"
 		android:layout_centerHorizontal="true"
@@ -274,7 +292,7 @@
 	    <TableRow>
 	        <TextView
 	            android:layout_column="1"
-	            android:text="In-Call Screen Guard"
+	            android:text="@string/screen_guard_pref_title"
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="wrap_content"/>
@@ -289,7 +307,7 @@
 	            android:padding="3dip"
 				android:layout_height="wrap_content" 
 				android:layout_width="fill_parent"
-				android:text="This is the on/off switch for the In-Call Screen Guard tool which places a black screen over the normal in-call screen.  Helpful for people who find their cheeks accidentally muting calls, hanging up on calls, dialing numbers in the middle of a call and so on."				
+				android:text="@string/screen_guard_pref_summary"				
 				/>
 		</TableRow>
 	    
@@ -298,10 +316,10 @@
 	        android:background="#FF909090" />
 
 	</TableLayout>
-
+	 -->
 	<!-- 
 	DEBUG
-	 -->
+
 	<View
 		android:id="@+id/pad3"
 		android:layout_height="30dip"
@@ -359,7 +377,7 @@
 	        android:layout_height="1dip"
 	        android:background="#FF909090" />
 	</TableLayout>
-
+	 -->
 
 </RelativeLayout>
 </ScrollView>

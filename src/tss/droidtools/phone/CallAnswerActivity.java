@@ -3,6 +3,7 @@ package tss.droidtools.phone;
 import java.lang.reflect.Method;
 
 import tss.droidtools.BaseActivity;
+import tss.droidtools.R;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;

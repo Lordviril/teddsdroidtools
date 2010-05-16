@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="200sp"
     android:layout_gravity="bottom">
-s
+
    	<TextView 
    		android:id="@+id/msg1"
 		android:layout_width="wrap_content" 
@@ -13,8 +13,8 @@ s
    		android:text="@string/answer_msg1"
    		android:layout_alignParentTop="true"
    		android:layout_centerHorizontal="true"
-   		android:textColor="#FFAA00"
-   		android:background="#000000"
+   		android:textColor="@color/tdt_activity_msg_color_1"
+   		android:background="@color/black"
       	android:typeface="monospace"
    		android:textSize="14sp"
    		android:textStyle="bold"
@@ -33,7 +33,7 @@ s
 			android:layout_width="100sp" 
 			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
-			android:text="Answer"
+			android:text="@string/answer_button_label"
 			android:layout_marginLeft="5sp"
 			/>
 			
@@ -42,14 +42,14 @@ s
 			android:layout_width="70sp" 
 			android:layout_height="wrap_content"
 			android:layout_centerHorizontal="true"
-			android:text="Exit"
+			android:text="@string/exit_button_label"
 			/>
 
 		<Button	 
 			android:id="@+id/rejectCallButton"
 			android:layout_width="100sp" 
 			android:layout_height="wrap_content"
-			android:text="Ignore"
+			android:text="@string/reject_button_label"
 			android:layout_alignParentRight="true"
 			android:layout_marginRight="5sp"/>
 	</RelativeLayout>

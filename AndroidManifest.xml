@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest 
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="tss.droidtools.phone"
+	package="tss.droidtools"
 	android:versionCode="6"
 	android:versionName="0.1-beta4.1">
 
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
+	<application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
 
 		<activity 
-			android:name=".ConfigScreenActivity"
+			android:name=".phone.ConfigScreenActivity"
 			android:label="@string/app_name">
 			
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
+
 		</activity>
 
 		<activity
-			android:name=".CallAnswerActivity"
-			android:label="CallAnswerActivity"
+			android:name=".phone.CallAnswerActivity"
+			android:label="@string/call_answer_activity_label"
 			android:excludeFromRecents="true"
 			android:launchMode="standard"
 			android:taskAffinity=""
@@ -27,21 +24,32 @@
 			android:screenOrientation="portrait" />
 			
 		<activity
-			android:name=".InCallScreenGuardActivity"
-			android:label="Tedd\'s In-Call Screen Guard"
+			android:name=".phone.InCallScreenGuardActivity"
+			android:label="@string/screen_guard_activity_label"
 			android:excludeFromRecents="true"
 			android:launchMode="standard"
 			android:taskAffinity=""
 			android:screenOrientation="portrait">
 		</activity>
 
-		<receiver android:name=".PhoneCallReceiver" android:enabled="true">
+		<activity
+			android:name=".PrefsActivity"
+			android:label="@string/preferences_activity_label">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+					
+		
+
+		<receiver android:name=".phone.PhoneCallReceiver" android:enabled="true">
 			<intent-filter>
 				<action android:name="android.intent.action.PHONE_STATE" />
 			</intent-filter>
 		</receiver>
-		<service android:name="CallAnswerIntentService" />
-		<service android:name="InCallScreenGuardService" />
+		<service android:name=".phone.CallAnswerIntentService" />
+		<service android:name=".phone.InCallScreenGuardService" />
 	</application>
 	
 	<!--  

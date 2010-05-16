@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import tss.droidtools.BaseActivity;
+import tss.droidtools.R;
 
 public class InCallScreenGuardActivity extends BaseActivity {
 	BroadcastReceiver r;

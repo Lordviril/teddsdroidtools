@@ -23,7 +23,6 @@ public class CallAnswerIntentService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Context c = getBaseContext();
-
 		
 		// pause
 		try {
@@ -41,8 +40,7 @@ public class CallAnswerIntentService extends IntentService {
 			return;
 
 		// (re)start the CallAnswerActivity
-		Intent i = new Intent();
-		i.setClassName("tss.droidtools.phone","tss.droidtools.phone.CallAnswerActivity");
+		Intent i = new Intent(c, CallAnswerActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
 		logMe("starting call screen");
 		c.startActivity(i);

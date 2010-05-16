@@ -1,11 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Tedd\'s Droid Tools</string>
+	<string name="app_name">Tedd\'s Droid Tools</string>
 	<string name="camera_answer_about">Phone Tools</string>
-    <string name="answer_msg1">Tedd\'s Answer Call Tool</string>
-    <string name="answer_msg2"> ... Or  ...</string>
+	<string name="answer_msg1">Tedd\'s Answer Call Tool</string>
+	<string name="answer_msg2"> ... Or ...</string>
 	<string name="answer_msg3">Return To Regular Call Screen</string>
 	<string name="answer_msg4">Long Press To Answer</string>
 	<string name="answer_msg5">Long Press To Obliterate Call</string>
+
+		
+	<string name="all_phone_tools_title">All Phone Tools</string>
+	<string name="all_phone_tools_pref_title">All Phone Tools (On/Off)</string>
+	<string name="all_phone_tools_pref_summary">This is the master on/off switch for all of the
+		Phone Tools. Disabling this prevents all of the Answer, Ignore Call
+		and In-Call Screen Guard features from running regardless of whether
+		or not they are enabled below.</string>
+		
+	<string name="call_answer_tools_title">Call Answering Tools</string>
+	<string name="call_answer_tools_pref_title">Call Answer Tools (On/Off)</string>
+	<string name="call_answer_tools_pref_summary">This is the master on/off switch for the call
+		answering tools (Answer and Ignore Call features).</string>
+		
+	<string name="camera_answer_pref_title">Answer Call With Camera Button</string>
+	<string name="camera_answer_pref_summary">Enabling this will allow you to answer incoming
+		calls by pressing down on the camera button.</string>
+		
+	<string name="trackball_answer_pref_title">Answer Call With Track Ball Press</string>
+	<string name="trackball_answer_pref_summary">Enabling this will allow you to answer incoming
+		calls by pressing down on the track ball.</string>
+		
+	<string name="button_answer_pref_title">Answer Call With Touch Screen Button</string>
+	<string name="button_answer_pref_summary">Enabling this will display a touch screen button on
+		the answer call screen which you may long press to answer the call
+		with.</string>
+		
+	<string name="reject_call_pref_title">Enable Reject/Ignore Call</string>
+	<string name="reject_call_pref_summary">Enabling this will display a touch screen button on
+		the answer call screen which you may long press to ignore the call
+		with.</string>
+		
 	<string name="screen_guard_msg1">Tedd\'s In-Call Screen Guard</string>
+	<string name="screen_guard_title">In-Call Screen Guard</string>
+	<string name="screen_guard_pref_title">In-Call Screen Guard</string>
+	<string name="screen_guard_pref_summary">This is the on/off switch for the In-Call Screen
+		Guard tool which places a black screen over the normal in-call screen.
+		Helpful for people who find their cheeks accidentally muting calls,
+		hanging up on calls, dialing numbers in the middle of a call and so
+		on.</string>
+
+	<string name="debug_pref_title">Debug Logging</string>
+	<string name="debug_pref_summary">Enabling this will turn debug logging on. This will
+		allow you to use log viewing utilities like Log Collector to examine
+		this applications behavior and/or send diagnostic data to the
+		developer.</string>
+<string name="answer_button_label">Answer</string>
+<string name="reject_button_label">Ignore</string>
+<string name="exit_button_label">Exit</string>
+<string name="longpress_exit_button_label">Long Press To Exit</string>
+<string name="call_answer_activity_label">CallAnswerActivity</string>
+<string name="screen_guard_activity_label">Tedd\'s In-Call Screen Guard</string>
+<string name="preferences_activity_label">PrefsActivity</string>
+
 </resources>

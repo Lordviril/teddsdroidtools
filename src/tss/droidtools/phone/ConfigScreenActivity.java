@@ -1,6 +1,7 @@
 package tss.droidtools.phone;
 
 import tss.droidtools.BaseActivity;
+import tss.droidtools.R;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,14 +21,14 @@ public class ConfigScreenActivity extends BaseActivity {
 
         setContentView(R.layout.main);
 
-        renderConfigCheckbox(Hc.PREF_PHONE_TOOLS_KEY,true,R.id.phoneToolsCheckBox,"ALL Phone Tools have been");
-        renderConfigCheckbox(Hc.PREF_CALL_ANSWER_TOOLS_KEY,true,R.id.callAnswerTools,"Call Answer Tools");
-        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_CAMERA_KEY,true,R.id.cameraAnswerCheckBox,"Camera Button Answer");
-        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_TRACKBALL_KEY,true,R.id.trackballAnswerCheckBox,"Trackball Answer");
-        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_BUTTON_KEY,true,R.id.touchscreenButtonAnswerCheckBox,"Touchscreen Button Answer");
-        renderConfigCheckbox(Hc.PREF_ALLOW_REJECT_KEY,true,R.id.rejectCallsCheckBox,"Reject Call Feature");
-        renderConfigCheckbox(Hc.PREF_SCREEN_GUARD_TOOLS_KEY,true,R.id.inCallScreenGuardCheckBox,"In-Call Screen Guard");
-        renderConfigCheckbox(Hc.PREF_DEBUG_LOGGING_KEY,true,R.id.debugLoggingCheckBox,"Debug Logging");
+        //renderConfigCheckbox(Hc.PREF_PHONE_TOOLS_KEY,true,R.id.phoneToolsCheckBox,"ALL Phone Tools have been");
+//        renderConfigCheckbox(Hc.PREF_CALL_ANSWER_TOOLS_KEY,true,R.id.callAnswerTools,"Call Answer Tools");
+//        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_CAMERA_KEY,true,R.id.cameraAnswerCheckBox,"Camera Button Answer");
+//        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_TRACKBALL_KEY,true,R.id.trackballAnswerCheckBox,"Trackball Answer");
+//        renderConfigCheckbox(Hc.PREF_ANSWER_WITH_BUTTON_KEY,true,R.id.touchscreenButtonAnswerCheckBox,"Touchscreen Button Answer");
+//        renderConfigCheckbox(Hc.PREF_ALLOW_REJECT_KEY,true,R.id.rejectCallsCheckBox,"Reject Call Feature");
+        //renderConfigCheckbox(Hc.PREF_SCREEN_GUARD_TOOLS_KEY,true,R.id.inCallScreenGuardCheckBox,"In-Call Screen Guard");
+        //renderConfigCheckbox(Hc.PREF_DEBUG_LOGGING_KEY,true,R.id.debugLoggingCheckBox,"Debug Logging");
         
     }
     

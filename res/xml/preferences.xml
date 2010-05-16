@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<CheckBoxPreference android:key="enabled"
+		android:title="@string/all_phone_tools_pref_title" android:summary="@string/all_phone_tools_pref_summary" android:persistent="true" android:defaultValue="false"/>
+
+
+	<CheckBoxPreference android:key="callanswertools"
+		android:title="@string/call_answer_tools_pref_title" android:summary="@string/call_answer_tools_pref_summary" android:persistent="true" android:defaultValue="false"/>
+
+	<CheckBoxPreference android:key="cameraanswer"
+		android:title="@string/camera_answer_pref_title" android:summary="@string/camera_answer_pref_summary" android:persistent="true" android:defaultValue="false"/>
+
+	<CheckBoxPreference android:key="trackballanswer"
+		android:title="@string/trackball_answer_pref_title" android:summary="@string/trackball_answer_pref_summary" android:persistent="true" android:defaultValue="false"/>
+
+	<CheckBoxPreference android:key="buttonanswer"
+		android:title="@string/button_answer_pref_title" android:summary="@string/button_answer_pref_summary" android:persistent="true" android:defaultValue="false"/>
+
+	<CheckBoxPreference android:key="rejectcall"
+		android:title="@string/reject_call_pref_title" android:summary="@string/reject_call_pref_summary" android:persistent="true" android:defaultValue="false"/>
+
+	<CheckBoxPreference android:key="screenguardtools"
+		android:title="@string/screen_guard_pref_title" android:summary="@string/screen_guard_pref_summary" android:persistent="true" android:defaultValue="false"/>
+
+	<CheckBoxPreference android:key="debuglogging"
+		android:title="@string/debug_pref_title" android:summary="@string/debug_pref_summary" android:persistent="true" android:defaultValue="true"/>
+
+</PreferenceScreen>
