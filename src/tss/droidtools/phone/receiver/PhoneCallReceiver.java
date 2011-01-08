@@ -1,6 +1,9 @@
-package tss.droidtools.phone;
+package tss.droidtools.phone.receiver;
 
 import tss.droidtools.BaseReceiver;
+import tss.droidtools.phone.Hc;
+import tss.droidtools.phone.service.CallAnswerIntentService;
+import tss.droidtools.phone.service.InCallScreenGuardService;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;

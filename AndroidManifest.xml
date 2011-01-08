@@ -9,7 +9,7 @@
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 
 		<activity 
-			android:name=".ConfigScreenActivity"
+			android:name=".activity.ConfigScreenActivity"
 			android:label="@string/app_name">
 			
 			<intent-filter>
@@ -19,7 +19,7 @@
 		</activity>
 
 		<activity
-			android:name=".CallAnswerActivity"
+			android:name=".activity.CallAnswerActivity"
 			android:label="CallAnswerActivity"
 			android:excludeFromRecents="true"
 			android:launchMode="standard"
@@ -28,7 +28,7 @@
 			android:screenOrientation="portrait" />
 			
 		<activity
-			android:name=".InCallScreenGuardActivity"
+			android:name=".activity.InCallScreenGuardActivity"
 			android:label="Tedd\'s In-Call Screen Guard"
 			android:excludeFromRecents="true"
 			android:launchMode="standard"
@@ -36,13 +36,13 @@
 			android:screenOrientation="portrait">
 		</activity>
 
-		<receiver android:name=".PhoneCallReceiver" android:enabled="true">
+		<receiver android:name=".receiver.PhoneCallReceiver" android:enabled="true">
 			<intent-filter>
 				<action android:name="android.intent.action.PHONE_STATE" />
 			</intent-filter>
 		</receiver>
-		<service android:name="CallAnswerIntentService" />
-		<service android:name="InCallScreenGuardService" />
+		<service android:name="service.CallAnswerIntentService" />
+		<service android:name="service.InCallScreenGuardService" />
 	</application>
 	
 	<!--  

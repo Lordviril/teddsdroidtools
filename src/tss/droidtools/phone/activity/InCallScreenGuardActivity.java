@@ -1,4 +1,4 @@
-package tss.droidtools.phone;
+package tss.droidtools.phone.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import tss.droidtools.BaseActivity;
+import tss.droidtools.phone.R;
+import tss.droidtools.phone.R.id;
+import tss.droidtools.phone.R.layout;
 
 public class InCallScreenGuardActivity extends BaseActivity {
 	BroadcastReceiver r;

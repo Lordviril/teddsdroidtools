@@ -1,5 +1,7 @@
-package tss.droidtools.phone;
+package tss.droidtools.phone.service;
 
+import tss.droidtools.phone.Hc;
+import tss.droidtools.phone.activity.InCallScreenGuardActivity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;

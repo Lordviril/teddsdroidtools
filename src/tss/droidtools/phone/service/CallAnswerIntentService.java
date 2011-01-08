@@ -1,5 +1,6 @@
-package tss.droidtools.phone;
+package tss.droidtools.phone.service;
 
+import tss.droidtools.phone.Hc;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;

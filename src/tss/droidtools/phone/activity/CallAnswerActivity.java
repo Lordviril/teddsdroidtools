@@ -1,8 +1,13 @@
-package tss.droidtools.phone;
+package tss.droidtools.phone.activity;
 
 import java.lang.reflect.Method;
 
 import tss.droidtools.BaseActivity;
+import tss.droidtools.phone.Hc;
+import tss.droidtools.phone.R;
+import tss.droidtools.phone.R.id;
+import tss.droidtools.phone.R.layout;
+import tss.droidtools.phone.service.CallAnswerIntentService;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;

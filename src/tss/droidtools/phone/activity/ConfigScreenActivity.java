@@ -1,6 +1,10 @@
-package tss.droidtools.phone;
+package tss.droidtools.phone.activity;
 
 import tss.droidtools.BaseActivity;
+import tss.droidtools.phone.Hc;
+import tss.droidtools.phone.R;
+import tss.droidtools.phone.R.id;
+import tss.droidtools.phone.R.layout;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
