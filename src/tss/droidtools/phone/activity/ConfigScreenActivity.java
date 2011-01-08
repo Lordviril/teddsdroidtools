@@ -1,27 +1,27 @@
 package tss.droidtools.phone.activity;
 
-import tss.droidtools.BaseActivity;
 import tss.droidtools.phone.Hc;
 import tss.droidtools.phone.R;
-import tss.droidtools.phone.R.id;
-import tss.droidtools.phone.R.layout;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CheckBox;
-import android.widget.Toast;
+
 /**
- * Configuration screen for the camera button 
+ * Configuration screen.
+ *  
  * @author tedd
  *
  */
-public class ConfigScreenActivity extends BaseActivity {
+public class ConfigScreenActivity extends Activity {
 
-    /** Called when the activity is first created. */
+	protected SharedPreferences preferences;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
+		preferences = getSharedPreferences(Hc.PREFSNAME, 0);
         setContentView(R.layout.main);
 
         renderConfigCheckbox(Hc.PREF_PHONE_TOOLS_KEY,true,R.id.phoneToolsCheckBox,"ALL Phone Tools have been");
@@ -35,50 +35,31 @@ public class ConfigScreenActivity extends BaseActivity {
         
     }
     
-    private void renderConfigCheckbox(String key,boolean defaultVal,int viewId, String toastMsg) {
-    	// set the default if it didn't exist
-        if (!p.contains(key))
-        	p.edit().putBoolean(key, defaultVal).commit();
+    /**
+     * Renders a configurations check box, setting a default
+     * value if its the first time this preference has been
+     * referenced, with the users stored value and establishes
+     * an onClick handler.
+     * 
+     * @param preferenceKey
+     * @param defaultValue
+     * @param viewId
+     * @param toastMsg
+     */
+    private void renderConfigCheckbox(String preferenceKey, 
+    		boolean defaultValue, int viewId, String toastMsg) {
 
-        // get the current setting
-        Boolean currentSetting = p.getBoolean(key, defaultVal);
-        
-        // get the view component
+    	// set a default value if one does not exist yet for the preference
+        if (!preferences.contains(preferenceKey)) {
+        	preferences.edit().putBoolean(preferenceKey, defaultValue).commit();
+        }
+
+        // get the current preference value and view component
+        Boolean currentValue = preferences.getBoolean(preferenceKey, defaultValue);
         final CheckBox checkbox = (CheckBox) findViewById(viewId);
         
-        // set the current setting
-        checkbox.setChecked(currentSetting);
-        
-        // register the onClick call back
-        checkbox.setOnClickListener(new CustomOnClickListener(key,toastMsg) {
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) 
-                {
-                	p.edit().putBoolean(key, true).commit();
-                    Toast.makeText(ConfigScreenActivity.this, toastMsg + " Enabled", Toast.LENGTH_SHORT).show();
-                } 
-                else 
-                {
-                	p.edit().putBoolean(key, false).commit();
-                    Toast.makeText(ConfigScreenActivity.this, toastMsg + " Disabled", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });  
-    }
-    
-    private class CustomOnClickListener implements OnClickListener {
-
-    	protected String key;
-    	protected String toastMsg;
-    	public CustomOnClickListener(String key,String toastMsg) {
-    		this.key = key; 
-    		this.toastMsg = toastMsg;
-    	}
-		@Override
-		public void onClick(View v) {
-			throw new UnsupportedOperationException();
-			
-		}
-    	
+        // set the current setting and register the onClick call back
+        checkbox.setChecked(currentValue);
+        checkbox.setOnClickListener(new ConfigCheckBoxOnClickListener(preferenceKey, toastMsg, preferences, ConfigScreenActivity.this));  
     }
 }
